@@ -4,14 +4,87 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+
+import com.android.volley.Response;
+
+import java.util.ArrayList;
+
+import dazhe.ymgan.com.dazhe.adapters.ItemAdapter;
+import dazhe.ymgan.com.dazhe.dal.ItemVolley;
+import dazhe.ymgan.com.dazhe.entities.ItemInfo;
+
 
 public class ItemListActivity extends AppCompatActivity {
+
+    private ListView listView;
+    private ArrayList<ItemInfo> mItemList;
+    private ItemVolley itemVolley = null;
+    private ItemAdapter mAdapter = null;
+
+    private static final int PAGE_SIZE = 20;
+    private int currentPageNo = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_list);
+
+        mItemList = new ArrayList<ItemInfo>();
+
+        listView = (ListView) findViewById(R.id.list);
+
+        Response.Listener<ArrayList<ItemInfo>> mListener = new Response.Listener<ArrayList<ItemInfo>>() {
+            @Override
+            public void onResponse(ArrayList<ItemInfo> itemInfos) {
+
+                for(ItemInfo item : itemInfos){
+                    mItemList.add(item);
+                }
+
+                // get listview current position - used to maintain scroll position
+                int currentPosition = listView.getFirstVisiblePosition();
+
+                // Appending new data to menuItems ArrayList
+                mAdapter = new ItemAdapter(ItemListActivity.this, mItemList);
+                listView.setAdapter(mAdapter);
+                // Setting new scroll position
+                listView.setSelectionFromTop(currentPosition + 1, 0);
+            }
+        };
+
+        itemVolley = new ItemVolley(this);
+        itemVolley.setItemListener(mListener);
+        LoadItemInfos();
+
+        // LoadMore button
+        Button btnLoadMore = new Button(this);
+        btnLoadMore.setText("Load More");
+        /**
+         * Listening to Load More button click event
+         * */
+        btnLoadMore.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // Starting a new async task
+                LoadItemInfos();
+            }
+        });
+
+        // Adding Load More button to lisview at bottom
+        listView.addFooterView(btnLoadMore);
     }
+
+
+    private void LoadItemInfos(){
+        currentPageNo += 1;
+        itemVolley.LoadItems(currentPageNo, PAGE_SIZE);
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -34,4 +107,5 @@ public class ItemListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
