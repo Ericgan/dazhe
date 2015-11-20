@@ -6,34 +6,26 @@ package dazhe.ymgan.com.dazhe.entities;
 public class ItemInfo {
 
     private String nick;
-    private String openIid;
-    private String picUrl;
+    private String open_iid;
+    private String pic_url;
     private String title;
-    private String couponPrice;
-    private String couponRate;
+    private String coupon_price;
+    private String coupon_rate;
 
-    public String getNick() {
-        return nick;
+    public String getCoupon_rate() {
+        return coupon_rate;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
+    public void setCoupon_rate(String coupon_rate) {
+        this.coupon_rate = coupon_rate;
     }
 
-    public String getOpenIid() {
-        return openIid;
+    public String getCoupon_price() {
+        return coupon_price;
     }
 
-    public void setOpenIid(String openIid) {
-        this.openIid = openIid;
-    }
-
-    public String getPicUrl() {
-        return picUrl;
-    }
-
-    public void setPicUrl(String picUrl) {
-        this.picUrl = picUrl;
+    public void setCoupon_price(String coupon_price) {
+        this.coupon_price = coupon_price;
     }
 
     public String getTitle() {
@@ -44,19 +36,27 @@ public class ItemInfo {
         this.title = title;
     }
 
-    public String getCouponPrice() {
-        return couponPrice;
+    public String getPic_url() {
+        return pic_url;
     }
 
-    public void setCouponPrice(String couponPrice) {
-        this.couponPrice = couponPrice;
+    public void setPic_url(String pic_url) {
+        this.pic_url = pic_url;
     }
 
-    public String getCouponRate() {
-        return couponRate;
+    public String getOpen_iid() {
+        return open_iid;
     }
 
-    public void setCouponRate(String couponRate) {
-        this.couponRate = couponRate;
+    public void setOpen_iid(String open_iid) {
+        this.open_iid = open_iid;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 }

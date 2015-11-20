@@ -1,6 +1,7 @@
 package dazhe.ymgan.com.dazhe.dal;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -19,11 +20,14 @@ import java.util.ArrayList;
 
 import dazhe.ymgan.com.dazhe.base.Config;
 import dazhe.ymgan.com.dazhe.entities.ItemInfo;
+import dazhe.ymgan.com.dazhe.responses.AtbItemsCouponGetResponse;
 
 /**
  * Created by ymgan on 2015/11/19.
  */
 public class ItemVolley {
+
+    private static final String TAG = "DZ_ItemVolley";
 
     private Context mContext = null;
 
@@ -36,10 +40,17 @@ public class ItemVolley {
         this.mListener = new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
-                ArrayList<ItemInfo> itemList = null;
-                Gson gson = new Gson();
-                itemList = gson.fromJson(s, new TypeToken<ArrayList<ItemInfo>>(){}.getType());
-                itemListener.onResponse(itemList);
+
+                Log.d(TAG,s);
+
+                try {
+                    Gson gson = new Gson();
+                    AtbItemsCouponGetResponse rsp = gson.fromJson(s, AtbItemsCouponGetResponse.class);
+                    itemListener.onResponse(rsp.items.aitaobao_item);
+                }
+                catch (Exception ex){
+                    Log.e(TAG,"getJson",ex);
+                }
             }
         };
     }

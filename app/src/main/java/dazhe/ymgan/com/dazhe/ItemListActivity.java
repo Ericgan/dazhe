@@ -8,13 +8,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 
 import dazhe.ymgan.com.dazhe.adapters.ItemAdapter;
 import dazhe.ymgan.com.dazhe.dal.ItemVolley;
 import dazhe.ymgan.com.dazhe.entities.ItemInfo;
+import dazhe.ymgan.com.dazhe.utils.BitmapCache;
 
 
 public class ItemListActivity extends AppCompatActivity {
@@ -27,6 +31,8 @@ public class ItemListActivity extends AppCompatActivity {
     private static final int PAGE_SIZE = 20;
     private int currentPageNo = 0;
 
+    private ImageLoader mImgLoader = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,7 +40,13 @@ public class ItemListActivity extends AppCompatActivity {
 
         mItemList = new ArrayList<ItemInfo>();
 
+
+        RequestQueue mQueue = Volley.newRequestQueue(this);
+        mImgLoader = new ImageLoader(mQueue, new BitmapCache());
+
+
         listView = (ListView) findViewById(R.id.list);
+
 
         Response.Listener<ArrayList<ItemInfo>> mListener = new Response.Listener<ArrayList<ItemInfo>>() {
             @Override
@@ -48,7 +60,7 @@ public class ItemListActivity extends AppCompatActivity {
                 int currentPosition = listView.getFirstVisiblePosition();
 
                 // Appending new data to menuItems ArrayList
-                mAdapter = new ItemAdapter(ItemListActivity.this, mItemList);
+                mAdapter = new ItemAdapter(ItemListActivity.this, mItemList,mImgLoader);
                 listView.setAdapter(mAdapter);
                 // Setting new scroll position
                 listView.setSelectionFromTop(currentPosition + 1, 0);
